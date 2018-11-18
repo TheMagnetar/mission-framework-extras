@@ -14,7 +14,7 @@
  *
  * Example:
  * [player, "leg_r", 0.8, "ACE_556x45_Ball_Mk318", 0.8] execVM "assignWound.sqf";
- *
+ * ["Rocket_03_HE_F", player, 100, 35, 0, 4, 0.5, "west"] call umfx_support_fnc_artilleryFire
  * Public: Yes
  */
 
@@ -31,22 +31,28 @@
 */
 
 params [
-    ["_ammoType", "", [""]],
+    ["_ammo", "", [""]],
     ["_targetPos", objNull, [objNull, grpNull, "", locationNull, taskNull, [], 0]], // Same as CBA_fnc_getPos
     ["_radius", 50, [0]],
     ["_dangerArea", 0, [0]],
-    ["_height", 0, [0]],
     ["_numRounds", 0, [0]],
     ["_delay", 0.1, [0]],
     ["_side", "", [""]],
+    ["_ammoType", "explosive", [""]],
     ["_artilleryUnit", objNull, [objNull]]
 ];
 
+systemChat format ["_pos %1", _targetPos];
 if (!isServer) exitWith {};
 if !(_side in ["civilian", "east", "resistance", "west"]) exitWith {
-    ERROR_2("Unknown side specfied %1. Allowed %1",_side,["civilian", "east", "resistance", "west"]);
+    //ERROR_2("Unknown side specfied %1. Allowed %2",_side,["civilian", "east", "resistance", "west"]);
 };
 
+if !(_ammoType in ["explosive", "flare", "smoke"]) exitWith {
+    //ERROR_2("Unknown ammoType specfied %1. Allowed %2",_ammoType,["explosive", "flare", "smoke"]);
+};
+
+systemChat format ["_pos %1", _targetPos];
 _targetPos = [_targetPos] call CBA_fnc_getPos;
 _side = switch (_side) do {
     case "east": {east};
@@ -58,7 +64,11 @@ _side = switch (_side) do {
 
 [{
     params ["_handleArray", "_handleId"];
-    _handleArray params ["_ammoType", "_targetPos", "_radius", "_dangerArea", "_numRounds", "_side", "_artilleryUnit"];
+    _handleArray params ["_ammo", "_targetPos", "_radius", "_dangerArea", "_numRounds", "_side", "_artilleryUnit"];
+
+    if (_numRounds <= 1) then {
+        _handleId call CBA_fnc_removePerFrameHandler;
+    };
 
     private _i = 0;
     private _objectiveLocked = false;
@@ -68,22 +78,23 @@ _side = switch (_side) do {
     while {(_i < MAX_TRIES) && {!_objectiveLocked}} do {
         _tempPos = [_targetPos, _radius] call CBA_fnc_randPos;
         _units = _units inAreaArray [_tempPos, _dangerArea*2, _dangerArea*2];
-
         if (_units isEqualTo []) then {
             _objectiveLocked = true;
 
-            if (isNull _artilleryUnit) then {
-                _artilleryUnit doArtilleryFire [_tempPos, _ammoType, 1];
+            if !(isNull _artilleryUnit) then {
+                _artilleryUnit doArtilleryFire [_tempPos, _ammo, 1];
             } else {
-                _tempPos = _tempPos vectorAdd [0, 0, _height];
-                private _ammo = _ammoType createVehicle _tempPos;
-                if (_ammo isKindOf "") then {
+                _tempPos = _tempPos vectorAdd [0, 0, 50];
+
+                private _ammo = _ammo createVehicle _tempPos;
+                if (_ammo isEqualTo "explosive") then {
                     _ammo setVelocity [0, 0, -500];
                 };
             };
             _numRounds = _numRounds - 1;
+            _handleArray set [4, _numRounds];
         } else {
             _i = _i + 1;
         };
     };
-}, _delay, [_ammoType, _targetPos, _radius, _dangerArea, _numRounds, _side, _artilleryUnit]] call CBA_fnc_addPerFrameHandler;
+}, _delay, [_ammo, _targetPos, _radius, _dangerArea, _numRounds, _side, _artilleryUnit]] call CBA_fnc_addPerFrameHandler;

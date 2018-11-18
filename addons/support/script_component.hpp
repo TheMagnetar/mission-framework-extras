@@ -1,4 +1,4 @@
-#define COMPONENT Support
+#define COMPONENT support
 #define COMPONENT_BEAUTIFIED Support
 #include "\u\umfx\addons\main\script_mod.hpp"
 
@@ -15,3 +15,5 @@
 #endif
 
 #include "\u\umfx\addons\main\script_macros.hpp"
+
+#define MAX_TRIES 5
