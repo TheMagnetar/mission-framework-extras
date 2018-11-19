@@ -28,7 +28,7 @@ params [
 if (!local _unit) exitWith {};
 
 // Assign the wound
-private _acceptedBodyParts = ["head","body","hand_l","hand_r","leg_l","leg_r"];
+private _acceptedBodyParts = ["head", "body", "hand_l", "hand_r", "leg_l", "leg_r"];
 if ((_acceptedBodyParts find _bodyPart) == -1) exitWith {
     ERROR_2("Invalid body part selection. Available %1, used %2", _acceptedBodyParts, _bodyPart);
 };

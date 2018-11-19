@@ -23,8 +23,9 @@ if (!isServer) exitwith{};
 params [
     ["_entity", objNull, [objNull]],
     ["_target", objNull, [objNull, grpNull, "", locationNull, taskNull, [], 0]], // Same as CBA_fnc_getPos
-    ["_hRange", 0, [0]],
-    "_altura", "_speed", "_sleepT",
+    ["_horizontalRange", 0, [0]],
+    ["_verticalRange", 0, [0]],
+    "_speed", "_delay",
     ["_fireMode", "", [""]],
     ["_ammoType", "", ["", 0]],
     ["_debug", false, [true]]
@@ -33,20 +34,21 @@ params [
 private _customAmmo = false;
 private _gunner = _entity;
 private _crew = [];
-private _onFoot = false;
-_hRange = ceil (_hRange/_speed);
+private _onFoot = vehicle _entity isEqualTo _entity;
+systemChat format ["On foot %1", _onFoot];
 
-private _isFiring = _entity getvariable [QGVAR(rafagas), false];
-if (_isFiring) then {
-    WARNING_1("Se ha cambiado el objetivo de la ametralladora", _entity);
-    _entity setVariable [QGVAR(rafagas), false];
+private _isFiring = _entity getvariable [QGVAR(suppressiveFire), false];
+if (_isFiring) exitWith {
+    WARNING_1("Machinegun target has changed to %1", _entity);
+    _entity setVariable [QGVAR(isFiring), false];
 
-    waituntil {sleep 1; _entity getvariable ["colum_rafagas_stop",false]}; // si esta disparando esperar a q pare
+    [{!(_entity getVariable [QGVAR(suppressiveFire), false])}, {
+        _this call FUNC(suppressiveFire);
+    }, _this] call CBA_fnc_waitUntilAndExecute;
 };
 
 private _weapon = "";
-if (vehicle _entity == _entity) then {
-    _onFoot = true;
+if (_onFoot) then {
     _weapon = primaryWeapon _entity;
 } else {
     _weapon = currentWeapon _entity;
@@ -89,33 +91,31 @@ if (_fireMode isEqualTo "") then {
     };
 };
 
-private _pos = [_pos] call CBA_fnc_getPos;
-if (((_pos select 0) == 0) && {(_pos select 1) ==0}) exitWith {
+private _targetPos = [_target] call CBA_fnc_getPos;
+if (((_targetPos select 0) == 0) && {(_targetPos select 1) == 0}) exitWith {
     ERROR_1("Target %1 does not exist",_target);
 };
 
-private _positionTarget = [1, 0, _altura];
-private _AlturaActualRafaga= 0 - _hRange;
+private _targetInv = "ACE_Target_CInf" createvehicleLocal _targetPos;
 
-private _pos1 = getpos _entity;
-private _reldir = ((_pos select 0) - (_pos1 select 0)) atan2 ((_pos select 1) - (_pos1 select 1));
-private _reldir = _reldir % 360;
-
-
-private _TargetInv = "ACE_Target_CInf" createvehicleLocal _pos;
-private _debug_obj = if (_debug) then {"Sign_circle_EP1" createvehicleLocal _pos} else {nil};
-private _TmpLogic = "Logic" createvehicleLocal _pos;
-_TmpLogic setdir _reldir;
-_TmpLogic setpos _pos;
-_TmpLogic setvectorup [0,0,1];
-
-{
-    _x reveal _TargetInv;
-    _x doTarget _TargetInv;
-    _x disableAI "TARGET";
-    _x disableAI "AUTOTARGET";
-    _x disableAI "FSM";
-} foreach _crew;
+if (_onFoot) then {
+    // Aim
+    _entity doWatch _targetInv;
+    _entity glanceAt _targetInv;
+    _entity lookAt _targetInv;
+    _entity doTarget _targetInv;
+    _entity disableAI "TARGET";
+    _entity disableAI "AUTOTARGET";
+    _entity disableAI "FSM";
+} else {
+    {
+        _x reveal _targetInv;
+        _x doTarget _targetInv;
+        _x disableAI "TARGET";
+        _x disableAI "AUTOTARGET";
+        _x disableAI "FSM";
+    } foreach _crew;
+};
 
 {
     if ((_customAmmo && {_ammoType !=_x}) || {!_customAmmo}) then {
@@ -124,19 +124,47 @@ _TmpLogic setvectorup [0,0,1];
 } foreach magazines _entity;
 
 _entity addMagazine _ammoType;
-_entity setVariable [QGVAR(rafagas),true];
-_entity setVariable ["colum_rafagas_stop",false];
+_entity setVariable [QGVAR(suppressiveFire),true];
 _entity setBehaviour "COMBAT";
-_entity doTarget _TargetInv;
 
-while {alive _entity && {alive _gunner} && {_entity getvariable [QGVAR(rafagas),true]}} do {
+private _nextTime = CBA_missionTime;
+
+[{
+    params ["_handleArray", "_handleId"];
+    _handleArray params ["_entity", "_gunner", "_onFoot", "_target", "_weapon", "_fireMode", "_nextTime", "_speed", "_areaInfo"];
+
+    if (!alive _entity && {!alive _gunner} && {!(_gunner getVariable [QGVAR(suppressiveFire), false])}) exitWith {
+        [_handleId] call CBA_fnc_removePerFrameHandler;
+        _gunner setVariable [QGVAR(suppressiveFire), false];
+        if (_onFoot) then {
+            if (alive _entity) then {
+                _entity enableAI "TARGET";
+                _entity enableAI "AUTOTARGET";
+                _entity enableAI "FSM";
+            }
+        } else {
+            {
+                _x enableAI "TARGET";
+                _x enableAI "AUTOTARGET";
+                _x enableAI "FSM";
+            } foreach (_crew select {alive _x});
+        };
+
+        deletevehicle _target;
+    };
+
+    // Do not fire since time since last call is not enough.
+    if (CBA_missionTime < _nextTime) exitWith {};
+    _nextTime = CBA_missionTime + random _delay;
+    _handleArray set [6, _nextTime];
+
     if (count (magazines _entity) < 6) then {
         _entity addMagazine _ammoType;
     };
 
     if (_onFoot) then {
-        _entity doTarget _TargetInv;
-        _entity doFire _TargetInv;
+        _entity doTarget _target;
+        _entity doFire _target;
     } else {
         if !(_fireMode isEqualTo "") then {
             _entity fire [_weapon, _fireMode];
@@ -145,30 +173,20 @@ while {alive _entity && {alive _gunner} && {_entity getvariable [QGVAR(rafagas),
         };
     };
 
-    _AlturaActualRafaga = _AlturaActualRafaga + _speed;
-    _positionTarget set [0,_AlturaActualRafaga];
-    _pos =_TmpLogic modelToWorld _positionTarget;
-    _TargetInv setposATL _pos;
-    if (_debug) then {_debug_obj setdir (_reldir +180); _debug_obj setposATL _pos;};
-    _gunner lookAt _TargetInv;
-    //(commander _entity) lookAt _TargetInv;
+    //if (unitReady _entity) then {
+        //_entity doSuppressiveFire _target;
+    //};
 
-    if (_AlturaActualRafaga > _hRange) then {_AlturaActualRafaga= 0 -_hRange;};
-    sleep (random _sleepT);
-};
-
-_entity setVariable [QGVAR(rafagas), false];
-_entity setVariable ["colum_rafagas_stop", true];
-
-{
-    if ((!isnull _x) && {alive _x}) then
-    {
-        _x enableAI "TARGET";
-        _x enableAI "AUTOTARGET";
-        _x enableAI "FSM";
+    // Move the target
+    _areaInfo params ["_targetPos", "_horizontalRange", "_verticalRange"];
+    private _currentPos = getPosASL _target;
+    if (_currentPos select 0 > _targetPos + _horizontalRange/2) then {
+        _currentPos set [0, (currentPos select 0) - _horizontalRange/2];
+        _currentPos set [0, (currentPos select 1) + random (2*_verticalRange) - _verticalRange];
+        _target setPosATL _currentPos;
+    } else {
+        _currentPos set [0, (_currentPos select 0) + random _speed];
+        _target setPosATL _currentPos;
     };
-} foreach _crew;
 
-deletevehicle _TargetInv;
-deletevehicle _TmpLogic;
-if (_debug) then {deletevehicle _debug_obj};
+}, 0, [_entity, _gunner, _onFoot, _target, _weapon, _fireMode, _nextTime, _speed, [_targetPos, _horizontalRange, _verticalRange]]] call CBA_fnc_addPerFrameHandler;
