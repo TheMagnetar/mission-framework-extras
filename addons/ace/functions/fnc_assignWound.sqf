@@ -4,10 +4,10 @@
  * Assigns a wound manually.
  *
  * Arguments:
- * 0: Unit <OBJECT>
- * 1: Body part <STRING>
- * 2: Damage <NUMBER>
- * 3: Injury type <STRING>
+ * 0: Unit <OBJECT> (default: objNull)
+ * 1: Body part <STRING> (default: "")
+ * 2: Damage <NUMBER> (default: 0)
+ * 3: Injury type <STRING> (default: "bullet")
  *
  * Return Value:
  * None
@@ -22,7 +22,7 @@ params [
     ["_unit", objNull, [objNull]],
     ["_bodyPart", "", [""]],
     ["_damage", 0.0, [0]],
-    ["_injuryType", "", [""]]
+    ["_injuryType", "bullet", [""]]
 ];
 
 if (!local _unit) exitWith {};
