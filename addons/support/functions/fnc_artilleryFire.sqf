@@ -10,7 +10,7 @@
  * 1: Position <ARRAY><OBJECT><LOCATION><GROUP> (default: [])
  * 2: Radius in meters <NUMBER> (default: 50)
  * 3: Danger Area (area that will be avoided around a unit that complies with parameter 6) <NUMBER> (default: 0)
- * 4: Number of rounds <NUMBER> (default: 3)
+ * 4: Number of rounds <NUMBER> (default: 4)
  * 5: Average delay between rounds in seconds <NUMBER> (default: 0.5)
  * 6: Side that will be avoided by the artillery rounds (rounds will be avoided in the danger area) <SIDE><ARRAY> (default west)
  * 7: Ammo Type. It can be "explosive", "flare" or "smoke" <STRING> (default: "explosive")

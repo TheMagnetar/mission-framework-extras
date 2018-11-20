@@ -44,11 +44,9 @@
 params [
     ["_pursuer", objNull, [objNull, grpNull]],
     ["_pursued", objNull, [objNull, grpNull]],
-    ["_radio", 240, [0]],
+    ["_radius", 240, [0]],
     ["_timeout", 30, [0]]
 ];
-
-private _follow = true;
 
 private _grpPursuer = grpnull;
 private _grpPursued = grpnull;
@@ -64,31 +62,29 @@ if(_pursued isEqualType grpNull)then{
     _grpPursued = group _grpPursued;
 };
 
-while {_follow} do{
+private _time = CBA_missionTime;
+
+[{
+    params ["_handleArray", "_handleId"];
+    _handleArray params ["_grpPursuer", "_grpPursued", "_radius", "_time"];
 
     private _leaderPursuer = leader _grpPursuer;
     private _leaderPursued = leader _grpPursued;
 
-    if (units _grpPursuer isEqualTo []) then {
-        _follow = false;
+    if (units _grpPursuer isEqualTo [] || {units _grpPursued isEqualTo []}) exitWith {
+        [_handleId] call CBA_fnc_removePerFrameHandler;
     };
-    if (units _grpPursued isEqualTo []) then {
-        _follow = false;
-    };
+
+    if (moveToCompleted _leaderPursuer || {moveToFailed _leaderPursuer} || {!alive _leaderPursuer} || {CBA_missionTime < _time}) exitWith {};
 
     private _dir = _leaderPursued getDir _leaderPursuer;
-    private _pos= _leaderPursued getPos [_radio, _dir];
+    private _pos= _leaderPursued getPos [_radius, _dir];
 
-    if ((_leaderPursued distance _leaderPursuer) > _radio ) then {
+    if ((_leaderPursued distance _leaderPursuer) > _radius ) then {
         _leaderPursuer move _pos;
     };
 
-    sleep 1;
-    private _time2 = time + _timeout;
-    waitUntil {
-        sleep 0.5;
-        moveToCompleted _leaderPursuer || {moveToFailed _leaderPursuer} || {!alive _leaderPursuer} || {_time2 < time}
-    };
-};
+    _time = CBA_missionTime + _timeout;
+    _handleArray set [4, _time];
 
-
+}, 1, [_grpPursuer, _grpPursued, _radius, _timeout, _time]] call CBA_fnc_addPerFrameHandler;
