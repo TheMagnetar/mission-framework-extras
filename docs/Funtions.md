@@ -5,6 +5,7 @@ title: Public functions
 ## List of functions
 - ACE3: Assign wound
 - Artillery Fire
+- Pursue
 
 ### ACE3: Assign wound
 
@@ -22,7 +23,7 @@ title: Public functions
 **Example:**
 - [player, "leg_r", 0.8, "bullet"] call umfx_ace_fnc_assignWound;
 
-### Artillery Fire*
+### Artillery Fire
 
 **Description:** Funtions that simulates artillery fire in a zone. This script can be used in order to avoid hitting units of a specific
 side if a wide enough danger zone area is given. With Danger Area radius parameter set to 0, all units will be hit, independently
@@ -44,3 +45,18 @@ of the unit's side.
 **Examples:**
 - ["8Rnd_82mm_Mo_shells", player, 100, 35, 4, 0.5, west, "explosive"] call umfx_support_fnc_artilleryFire
 - [["8Rnd_82mm_Mo_shells", "Sh_120mm_HE"], player, 100, 35, 4, 0.5, [west, civillian], "explosive"] call umfx_support_fnc_artilleryFire
+
+### Pursue
+
+**Description**: Makes a group hunt another one.
+
+**Arguments:**
+- 0: Pursuer <OBJECT><GROUP>
+- 1: Pursued <OBJECT><GROUP>
+- 2: Radius around the pursued where the pursuer will move at. The smaller, the more precise the pursuer will hunt <NUMBER> (default: 240)
+- 3: Timeout used by the pursuer to move to a new position <NUMBER> (default: 30)
+
+**Return Value:** None
+**Examples:**
+- [cursorTarget, player , 45, 20] call umfx_ai_fnc_pursue
+- [cursorTarget, player , 45, 20] call umfx_ai_fnc_pursue

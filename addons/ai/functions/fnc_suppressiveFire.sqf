@@ -95,21 +95,17 @@ if (((_targetPos select 0) == 0) && {(_targetPos select 1) == 0}) exitWith {
     ERROR_1("Target %1 does not exist",_target);
 };
 
-private _targetInv = "ACE_Target_CInf" createvehicleLocal _targetPos;
+_targetPos = ATLToASL _targetPos;
 
 if (_onFoot) then {
     // Aim
-    _entity doWatch _targetInv;
-    _entity glanceAt _targetInv;
-    _entity lookAt _targetInv;
-    _entity doTarget _targetInv;
+    _entity lookAt _targetPos;
     _entity disableAI "TARGET";
     _entity disableAI "AUTOTARGET";
     _entity disableAI "FSM";
 } else {
     {
-        _x reveal _targetInv;
-        _x doTarget _targetInv;
+        _x lookAt _targetPos;
         _x disableAI "TARGET";
         _x disableAI "AUTOTARGET";
         _x disableAI "FSM";
@@ -130,17 +126,18 @@ private _nextTime = CBA_missionTime;
 
 [{
     params ["_handleArray", "_handleId"];
-    _handleArray params ["_entity", "_gunner", "_onFoot", "_target", "_weapon", "_fireMode", "_delay", "_nextTime", "_speed", "_areaInfo"];
+    _handleArray params ["_entity", "_gunner", "_targetPos", "_delay", "_horizontalRange"];
 
-    if (!alive _entity && {!alive _gunner} && {!(_gunner getVariable [QGVAR(suppressiveFire), false])}) exitWith {
+    if (!alive _entity || {!alive _gunner} || {!(_gunner getVariable [QGVAR(suppressiveFire), false])}) exitWith {
+        systemChat format ["remove"];
         [_handleId] call CBA_fnc_removePerFrameHandler;
         _gunner setVariable [QGVAR(suppressiveFire), false];
-        if (_onFoot) then {
+        if ((vehicle _entity) isEqualTo _entity) then {
             if (alive _entity) then {
                 _entity enableAI "TARGET";
                 _entity enableAI "AUTOTARGET";
                 _entity enableAI "FSM";
-            }
+            };
         } else {
             {
                 _x enableAI "TARGET";
@@ -148,45 +145,22 @@ private _nextTime = CBA_missionTime;
                 _x enableAI "FSM";
             } foreach (_crew select {alive _x});
         };
-
-        deletevehicle _target;
     };
-
+/*
     // Do not fire since time since last call is not enough.
     if (CBA_missionTime < _nextTime) exitWith {};
     _nextTime = CBA_missionTime + random _delay;
     _handleArray set [6, _nextTime];
-
+*/
     if (count (magazines _entity) < 6) then {
         _entity addMagazine _ammoType;
     };
 
-    if (_onFoot) then {
-        _entity doTarget _target;
-        _entity doFire _target;
-    } else {
-        if !(_fireMode isEqualTo "") then {
-            _entity fire [_weapon, _fireMode];
-        } else {
-            _entity fire _weapon;
-        };
+    if (unitReady _entity) then {
+         // Move the target
+        private _tempPos = _targetPos getPos [random _horizontalRange, random 360];
+        _entity lookAt _tempPos;
+        systemChat format ["_tempOs %1", _tempPos];
+        _entity doSuppressiveFire _tempPos;
     };
-
-    //if (unitReady _entity) then {
-        //_entity doSuppressiveFire _target;
-    //};
-
-    // Move the target
-    _areaInfo params ["_targetPos", "_horizontalRange", "_verticalRange"];
-    systemChat format ["Target Pos %1", _targetPos];
-    private _currentPos = getPosASL _target;
-    if (_currentPos select 0 > (_targetPos select 0) + _horizontalRange/2) then {
-        _currentPos set [0, (currentPos select 0) - _horizontalRange/2];
-        _currentPos set [0, (currentPos select 1) + random (2*_verticalRange) - _verticalRange];
-        _target setPosATL _currentPos;
-    } else {
-        _currentPos set [0, (_currentPos select 0) + random _speed];
-        _target setPosATL _currentPos;
-    };
-
-}, 0, [_entity, _gunner, _onFoot, _targetInv, _weapon, _fireMode, _delay, _nextTime, _speed, [_targetPos, _horizontalRange, _verticalRange]]] call CBA_fnc_addPerFrameHandler;
+}, 2, [_entity, _gunner, _targetPos, _delay, _nextTime, _horizontalRange]] call CBA_fnc_addPerFrameHandler;

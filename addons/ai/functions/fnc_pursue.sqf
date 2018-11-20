@@ -1,45 +1,23 @@
+#include "script_component.hpp"
 /*
  * Author: TheMagnetar
  * Assigns a wond manually.
  *
  * Arguments:
- * 0: Unit <OBJECT>
- * 1: Body part <STRING>
- * 2: Damage <NUMBER>
- * 3: Ammo <STRING>
+ * 0: Pursuer <OBJECT><GROUP>
+ * 1: Pursued <OBJECT><GROUP>
+ * 2: Radius around the pursued where the pursuer will move at. The smaller, the more precise the pursuer will hunt <NUMBER> (default: 240)
+ * 3: Timeout used by the pursuer to move to a new position <NUMBER> (default: 30)
  *
  * Return Value:
  * None
  *
  * Example:
- * [player, "leg_r", 0.8, "ACE_556x45_Ball_Mk318", 0.8] execVM "assignWound.sqf";
+ * [cursorTarget, player , 45, 20] call umfx_ai_fnc_pursue
+ * [cursorTarget, player , 45, 20] call umfx_ai_fnc_pursue
  *
  * Public: Yes
  */
-
-/*
-    persigue.sqf v1.1 2009/10/17 -  Boreas, TheMagnetar
-    Sencillo script que sirve para que una unidad persiga a otra. Para usarlo invocar la siguiente instruccion:
-
-    nullvar=[unidadPerseguidora,unidadPerseguida] execVm "persigue.sqf";
-
-    Se le pueden pasar mas parametros para acotar mas el modo de persecución:
-
-    nullvar=[unidadPerseguidora,unidadPerseguida,radio,tiempo] execVm "persigue.sqf";
-
-    Los parametros signigican lo siguiente:
-        -unidadPerseguidora: La IA que  persigue
-        -unidadPerseguida: La IA o el player que va aser perseguido
-        -radio: radio alrededor de la unidad perseguida en el que la IA persegidora intetnara moverse buscando.(25m por defecto)
-        -timpo: tiempo en segundos en que la IA perseguidora actualiza su movimiento para dirigirse a la nueva aera de busqueda(60s por defecto)
-
-    Ejemplo1:
-        nullvar=[cazador,presa] execvm "persigue.sqf";
-    Ejemplo2:
-        nullvar=[cazador,presa,40,30] execvm "persigue.sqf";
-        //60 son los metros de radio alrededor de la presa donde el cazador se movera
-        //30 es el intervalo de tiempo que el cazador utiliza para dirigirse a la nueva zona de busqueda de la presa
-*/
 
 params [
     ["_pursuer", objNull, [objNull, grpNull]],
@@ -59,14 +37,14 @@ if (_pursuer isEqualType grpNull)then{
 if(_pursued isEqualType grpNull)then{
     _grpPursued =  _pursued;
 } else {
-    _grpPursued = group _grpPursued;
+    _grpPursued = group _pursued;
 };
 
 private _time = CBA_missionTime;
 
 [{
     params ["_handleArray", "_handleId"];
-    _handleArray params ["_grpPursuer", "_grpPursued", "_radius", "_time"];
+    _handleArray params ["_grpPursuer", "_grpPursued", "_radius", "_timeout", "_time"];
 
     private _leaderPursuer = leader _grpPursuer;
     private _leaderPursued = leader _grpPursued;
