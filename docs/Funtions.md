@@ -43,8 +43,8 @@ of the unit's side.
 **Return Value:** None
 
 **Examples:**
-- ["8Rnd_82mm_Mo_shells", player, 100, 35, 4, 0.5, west, "explosive"] call umfx_support_fnc_artilleryFire
-- [["8Rnd_82mm_Mo_shells", "Sh_120mm_HE"], player, 100, 35, 4, 0.5, [west, civillian], "explosive"] call umfx_support_fnc_artilleryFire
+- ["Sh_155mm_AMOS", player, 100, 35, 4, 0.5, west, "explosive"] call umfx_support_fnc_artilleryFire
+- [["Sh_155mm_AMOS", "Sh_120mm_HE"], player, 100, 35, 4, 0.5, [west, civillian], "explosive"] call umfx_support_fnc_artilleryFire
 
 ### Pursue
 
