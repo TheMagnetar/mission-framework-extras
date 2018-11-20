@@ -13,7 +13,7 @@
  * None
  *
  * Example:
- * [player, "leg_r", 0.8, "ACE_556x45_Ball_Mk318", 0.8] execVM "assignWound.sqf";
+ * [cursorTarget, player , 12, 8, 0.2, 1.2, "", "ACE_556x45_Ball_Mk318"] call umfx_ai_fnc_suppressiveFire
  *
  * Public: Yes
  */
@@ -27,8 +27,7 @@ params [
     ["_verticalRange", 0, [0]],
     "_speed", "_delay",
     ["_fireMode", "", [""]],
-    ["_ammoType", "", ["", 0]],
-    ["_debug", false, [true]]
+    ["_ammoType", "", ["", 0]]
 ];
 
 private _customAmmo = false;
@@ -131,7 +130,7 @@ private _nextTime = CBA_missionTime;
 
 [{
     params ["_handleArray", "_handleId"];
-    _handleArray params ["_entity", "_gunner", "_onFoot", "_target", "_weapon", "_fireMode", "_nextTime", "_speed", "_areaInfo"];
+    _handleArray params ["_entity", "_gunner", "_onFoot", "_target", "_weapon", "_fireMode", "_delay", "_nextTime", "_speed", "_areaInfo"];
 
     if (!alive _entity && {!alive _gunner} && {!(_gunner getVariable [QGVAR(suppressiveFire), false])}) exitWith {
         [_handleId] call CBA_fnc_removePerFrameHandler;
@@ -179,8 +178,9 @@ private _nextTime = CBA_missionTime;
 
     // Move the target
     _areaInfo params ["_targetPos", "_horizontalRange", "_verticalRange"];
+    systemChat format ["Target Pos %1", _targetPos];
     private _currentPos = getPosASL _target;
-    if (_currentPos select 0 > _targetPos + _horizontalRange/2) then {
+    if (_currentPos select 0 > (_targetPos select 0) + _horizontalRange/2) then {
         _currentPos set [0, (currentPos select 0) - _horizontalRange/2];
         _currentPos set [0, (currentPos select 1) + random (2*_verticalRange) - _verticalRange];
         _target setPosATL _currentPos;
@@ -189,4 +189,4 @@ private _nextTime = CBA_missionTime;
         _target setPosATL _currentPos;
     };
 
-}, 0, [_entity, _gunner, _onFoot, _target, _weapon, _fireMode, _nextTime, _speed, [_targetPos, _horizontalRange, _verticalRange]]] call CBA_fnc_addPerFrameHandler;
+}, 0, [_entity, _gunner, _onFoot, _targetInv, _weapon, _fireMode, _delay, _nextTime, _speed, [_targetPos, _horizontalRange, _verticalRange]]] call CBA_fnc_addPerFrameHandler;

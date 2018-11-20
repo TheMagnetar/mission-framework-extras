@@ -11,7 +11,7 @@
  * 2: Radius in meters <NUMBER> (default: 50)
  * 3: Danger Area (area that will be avoided around a unit that complies with parameter 6) <NUMBER> (default: 0)
  * 4: Number of rounds <NUMBER> (default: 3)
- * 5: Minimum delay between rounds in seconds <NUMBER> (default: 0.1)
+ * 5: Average delay between rounds in seconds <NUMBER> (default: 0.5)
  * 6: Side that will be avoided by the artillery rounds (rounds will be avoided in the danger area) <SIDE><ARRAY> (default west)
  * 7: Ammo Type. It can be "explosive", "flare" or "smoke" <STRING> (default: "explosive")
  * 8: Make a unit on the map fire the rounds <OBJECT> (default: ojectNull)
@@ -38,45 +38,45 @@ params [
     ["_artilleryUnit", objNull, [objNull]]
 ];
 
-systemChat format ["_pos %1", _targetPos];
 if (!isServer) exitWith {};
 
-if !(_side in ["civilian", "east", "resistance", "west"]) exitWith {
-    //ERROR_2("Unknown side specfied %1. Allowed %2",_side,["civilian", "east", "resistance", "west"]);
+private _acceptedAmmoTypes =  ["explosive", "flare", "smoke"];
+if !(_ammoType in _acceptedAmmoTypes) exitWith {
+    ERROR_2("Unknown ammoType specfied %1. Allowed %2",_ammoType,_acceptedAmmoTypes);
 };
 
-if !(_ammoType in ["explosive", "flare", "smoke"]) exitWith {
-    //ERROR_2("Unknown ammoType specfied %1. Allowed %2",_ammoType,["explosive", "flare", "smoke"]);
-};
-
-if (_side isEqualType []) then {
+if !(_side isEqualType []) then {
     _side = [_side];
 };
 
 private _invalidSide = false;
 {
-    if (_x in [west, east, resistance, civilian, sideUnknown]) exitWith {
+    if !(_x in [west, east, resistance, civilian, sideUnknown]) exitWith {
         _invalidSide = true;
     }
 } forEach _side;
 
+private _acceptedSides = [west, east, resistance, civilian, sideUnknown];
 if (_invalidSide) exitWith {
-    //ERROR_2("Invalid side specified in position %1. Accepted sides %2",_forEachIndex,[west, east, resistance, civilian, sideUnknown]);
+    ERROR_2("Invalid side specified in position %1. Accepted sides %2",_forEachIndex,_acceptedSides);
 };
 
-if (_ammo isEqualTo "") then {
+if (_ammo isEqualType "") then {
     _ammo = [_ammo];
 };
 
 _targetPos = [_targetPos] call CBA_fnc_getPos;
+private _nextTime = CBA_missionTime;
 
 [{
     params ["_handleArray", "_handleId"];
-    _handleArray params ["_ammo", "_targetPos", "_radius", "_dangerArea", "_numRounds", "_side", "_artilleryUnit"];
+    _handleArray params ["_ammo", "_targetPos", "_radius", "_dangerArea", "_numRounds", "_side", "_ammoType", "_artilleryUnit", "_delay", "_nextTime"];
 
-    if (_numRounds <= 1) exitWith {
+    if (_numRounds < 1) exitWith {
         [_handleId] call CBA_fnc_removePerFrameHandler;
     };
+
+    if (CBA_missionTime < _nextTime) exitWith {};
 
     private _i = 0;
     private _objectiveLocked = false;
@@ -96,14 +96,16 @@ _targetPos = [_targetPos] call CBA_fnc_getPos;
                 _tempPos = _tempPos vectorAdd [0, 0, 37.5 + random 25];
 
                 private _selectedAmmo = _selectedAmmo createVehicle _tempPos;
-                if (_selectedAmmo isEqualTo "explosive") then {
+                if (_ammoType isEqualTo "explosive") then {
                     _selectedAmmo setVelocity [0, 0, -500];
                 };
             };
             _numRounds = _numRounds - 1;
+            _nextTime = CBA_missionTime + random (2*_delay) - _delay;
             _handleArray set [4, _numRounds];
+            _handleArray set [9, _nextTime];
         } else {
             _i = _i + 1;
         };
     };
-}, _delay, [_ammo, _targetPos, _radius, _dangerArea, _numRounds, _side, _artilleryUnit]] call CBA_fnc_addPerFrameHandler;
+}, 0, [_ammo, _targetPos, _radius, _dangerArea, _numRounds, _side, _ammoType, _artilleryUnit, _delay, _nextTime]] call CBA_fnc_addPerFrameHandler;
