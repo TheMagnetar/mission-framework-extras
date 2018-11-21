@@ -32,7 +32,7 @@ params [
     ["_radius", 50, [0]],
     ["_dangerArea", 0, [0]],
     ["_numRounds", 3, [0]],
-    ["_delay", 0.1, [0]],
+    ["_delay", 0.5, [0]],
     ["_side", west, [sideUnknown, []]],
     ["_ammoType", "explosive", [""]],
     ["_artilleryUnit", objNull, [objNull]]
@@ -97,7 +97,7 @@ private _nextTime = CBA_missionTime;
                 };
             };
             _numRounds = _numRounds - 1;
-            _nextTime = CBA_missionTime + random (2*_delay) - _delay;
+            _nextTime = CBA_missionTime + random [0, _delay, 2*_delay];
             _handleArray set [4, _numRounds];
             _handleArray set [9, _nextTime];
         } else {

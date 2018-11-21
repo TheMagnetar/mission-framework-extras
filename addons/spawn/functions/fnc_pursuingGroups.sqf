@@ -63,7 +63,7 @@ if (_units isEqualType "") then {
 
 [{
     params ["_handleArray", "_handleId"];
-    _handleArray params ["_target", "_position", "_units", "_radius", "_timeout", "_numGroups"];
+    _handleArray params ["_target", "_position", "_units", "_radius", "_timeout", "_numGroups", "_side"];
 
     if (_radius isEqualType []) then {
         _radius = [_radius] call EFUNC(core,getRandomMinMax);
@@ -82,4 +82,4 @@ if (_units isEqualType "") then {
     } else {
         _handleArray set [5, _numGroups];
     };
-}, _spawnDelay, [_target, _position, _units, _radius, _timeout, _numGroups]] call CBA_fnc_addPerFrameHandler;
+}, _spawnDelay, [_target, _position, _units, _radius, _timeout, _numGroups, _side]] call CBA_fnc_addPerFrameHandler;
