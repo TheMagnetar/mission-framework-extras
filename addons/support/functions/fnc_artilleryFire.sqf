@@ -72,10 +72,6 @@ private _nextTime = CBA_missionTime;
     params ["_handleArray", "_handleId"];
     _handleArray params ["_ammo", "_targetPos", "_radius", "_dangerArea", "_numRounds", "_side", "_ammoType", "_artilleryUnit", "_delay", "_nextTime"];
 
-    if (_numRounds < 1) exitWith {
-        [_handleId] call CBA_fnc_removePerFrameHandler;
-    };
-
     if (CBA_missionTime < _nextTime) exitWith {};
 
     private _i = 0;
@@ -107,5 +103,9 @@ private _nextTime = CBA_missionTime;
         } else {
             _i = _i + 1;
         };
+    };
+
+    if (_numRounds < 1) exitWith {
+        [_handleId] call CBA_fnc_removePerFrameHandler;
     };
 }, 0, [_ammo, _targetPos, _radius, _dangerArea, _numRounds, _side, _ammoType, _artilleryUnit, _delay, _nextTime]] call CBA_fnc_addPerFrameHandler;

@@ -13,8 +13,7 @@
  * None
  *
  * Example:
- * [cursorTarget, player , 45, 20] call umfx_ai_fnc_pursue
- * [cursorTarget, player , 45, 20] call umfx_ai_fnc_pursue
+ * [cursorTarget, player, 45, 20] call umfx_ai_fnc_pursue
  *
  * Public: Yes
  */
@@ -40,6 +39,7 @@ if(_pursued isEqualType grpNull)then{
     _grpPursued = group _pursued;
 };
 
+_grpPursuer setSpeedMode "FULL";
 private _time = CBA_missionTime;
 
 [{

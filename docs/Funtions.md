@@ -6,6 +6,7 @@ title: Public functions
 - ACE3: Assign wound
 - Artillery Fire
 - Pursue
+- Spawn pursuing groups
 
 ### ACE3: Assign wound
 
@@ -57,6 +58,33 @@ of the unit's side.
 - 3: Timeout used by the pursuer to move to a new position <NUMBER> (default: 30)
 
 **Return Value:** None
+
 **Examples:**
-- [cursorTarget, player , 45, 20] call umfx_ai_fnc_pursue
-- [cursorTarget, player , 45, 20] call umfx_ai_fnc_pursue
+- [cursorTarget, player, 45, 20] call umfx_ai_fnc_pursue
+
+### Spawn pursuing roups
+
+**Description**: Spawns pursuing groups in the given area.
+
+**Arguments:**
+- 0: Target <OBJECT, GROUP> (default: objNull)
+- 1: Spawn area <MARKER, TRIGGER, LOCATION, ARRAY> (default: [])
+- 2: Units <STRING, ARRAY> (default: [])
+- 3: Number of groups to spawn. In case an array is given, the number of groups that will be spawned will be
+     random between [a,b] <NUMBER, ARRAY> (default: 1)
+- 4: Side to spawn <SIDE> (default: east)
+- 5: Radius around the pursued where the pursuer will move at. The smaller, the more precise the pursuer will hunt.
+    In case an array is given, the radius will be random between [a,b] <NUMBER, ARRAY> (default: 240)
+- 6: Timeout used by the pursuer to move to a new position. In case an array is given, the radius will be random
+     between [a,b] <NUMBER, ARRAY> (default: 30)
+- 7: Spawn delay in seconds <NUMBER> (default: 1)
+
+**Return Value:** None
+
+**Examples:**
+- Spawn one group at a random position in the marker "marker"
+  `[player, "marker", ["CUP_O_TK_INS_Soldier_GL","CUP_O_TK_INS_Soldier_GL"]] call umfx_ai_fnc_pursuingGroups;`
+- Spawn between 1 and four groups at a random position in the marker "marker", the radius will be random between 5 and 15 meters
+  `[player, "marker", ["CUP_O_TK_INS_Soldier_GL","CUP_O_TK_INS_Soldier_GL"], [1, 4], east, [5, 15], 30] call umfx_spawn_fnc_pursuingGroups;`
+- Spawn one group at the defined area
+  `[player, [center, a, b, angle, isRectangle], ["CUP_O_TK_INS_Soldier_GL","CUP_O_TK_INS_Soldier_GL"]] call umfx_ai_fnc_pursuingGroups;`
