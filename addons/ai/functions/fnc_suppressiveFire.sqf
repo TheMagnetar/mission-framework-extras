@@ -1,6 +1,6 @@
 #include "script_component.hpp"
 /*
- * Author: TheMagnetar
+ * Author: TheMagnetar (original script by Columdrum)
  * Assigns a wond manually.
  *
  * Arguments:

@@ -1,6 +1,6 @@
 #include "script_component.hpp"
 /*
- * Author: TheMagnetar
+ * Author: TheMagnetar (original script by Columdrum)
  * Funtions that simulates artillery fire in a zone. This script can be used in order to avoid hitting units of a specific
  * side if a wide enough danger zone area is given. With Danger Area radius parameter set to 0, all units will be hit, independently
  * of the unit's side.
@@ -14,14 +14,15 @@
  * 5: Average delay between rounds in seconds <NUMBER> (default: 0.5)
  * 6: Side that will be avoided by the artillery rounds (rounds will be avoided in the danger area) <SIDE><ARRAY> (default west)
  * 7: Ammo Type. It can be "explosive", "flare" or "smoke" <STRING> (default: "explosive")
- * 8: Make a unit on the map fire the rounds <OBJECT> (default: ojectNull)
+ * 8: Height where the projectile will be generated <NUMBER> (default: 0)
+ * 9: Make a unit on the map fire the rounds <OBJECT> (default: ojectNull)
  *
  * Return Value:
  * None
  *
  * Example:
- * ["Sh_155mm_AMOS", player, 100, 35, 4, 0.5, west, "explosive"] call umfx_support_fnc_artilleryFire
- * [["Sh_155mm_AMOS", "Sh_120mm_HE"], player, 100, 35, 4, 0.5, [west, civillian], "explosive"] call umfx_support_fnc_artilleryFire
+ * ["Sh_155mm_AMOS", player, 100, 35, 4, 0.5, west, "explosive", 0] call umfx_support_fnc_artilleryFire
+ * [["Sh_155mm_AMOS", "Sh_120mm_HE"], player, 100, 35, 4, 0.5, [west, civillian], "explosive", 0] call umfx_support_fnc_artilleryFire
 
  * Public: Yes
  */
@@ -35,6 +36,7 @@ params [
     ["_delay", 0.5, [0]],
     ["_side", west, [sideUnknown, []]],
     ["_ammoType", "explosive", [""]],
+    ["_height", 0, [0]],
     ["_artilleryUnit", objNull, [objNull]]
 ];
 
@@ -89,7 +91,9 @@ private _nextTime = CBA_missionTime;
             if !(isNull _artilleryUnit) then {
                 _artilleryUnit doArtilleryFire [_tempPos, _selectedAmmo, 1];
             } else {
-                _tempPos = _tempPos vectorAdd [0, 0, 37.5 + random 25];
+                if (_height != 0) then {
+                    _tempPos = _tempPos vectorAdd [0, 0, random [0, _height, 2*_height]];
+                };
 
                 private _selectedAmmo = _selectedAmmo createVehicle _tempPos;
                 if (_ammoType isEqualTo "explosive") then {

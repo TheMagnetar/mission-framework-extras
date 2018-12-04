@@ -1,4 +1,4 @@
-#define COMPONENT AI
+#define COMPONENT ai
 #define COMPONENT_BEAUTIFIED AI Behaviour
 #include "\u\umfx\addons\main\script_mod.hpp"
 
