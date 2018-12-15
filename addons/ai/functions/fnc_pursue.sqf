@@ -56,3 +56,9 @@ private _time = CBA_missionTime;
     _handleArray set [4, _time];
 
 }, 1, [_grpPursuer, _target, _radius, _timeout, _time]] call CBA_fnc_addPerFrameHandler;
+
+
+params ["_unit"];
+
+if !(isServer) exitWith {};
+

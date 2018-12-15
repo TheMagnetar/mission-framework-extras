@@ -88,3 +88,17 @@ of the unit's side.
   `[player, "marker", ["CUP_O_TK_INS_Soldier_GL","CUP_O_TK_INS_Soldier_GL"], [1, 4], east, [5, 15], 30] call umfx_spawn_fnc_pursuingGroups;`
 - Spawn one group at the defined area
   `[player, [center, a, b, angle, isRectangle], ["CUP_O_TK_INS_Soldier_GL","CUP_O_TK_INS_Soldier_GL"]] call umfx_ai_fnc_pursuingGroups;`
+
+
+### Move to random position
+
+**Description**: Make the position of a unit to be randomly selected from an array of points
+
+**Arguments:**
+- 0: Unit <OBJECT> (default: objNull)
+- 1: Random locations. Accepted values are arrays, tasks, locations, objects or markers <ARRAY> (default: [])
+
+**Return Value:** None
+
+**Example:**
+[this, [p1, p2, p3, p4]] call umfx_spawn_fnc_unitRandomPos
