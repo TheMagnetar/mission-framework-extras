@@ -1,7 +1,7 @@
 #include "script_component.hpp"
 /*
  * Author: TheMagnetar
- * Returns a value between the specified minimum and maximum
+ * Returns a value between the specified minimum and maximum.
  *
  * Arguments:
  * 0: Range [min, max] or number <ARRAY><NUMBER>
