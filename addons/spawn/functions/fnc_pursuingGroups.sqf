@@ -35,7 +35,7 @@ if (!isServer) exitWith {};
 
 params [
     ["_target", objNull, [objNull, grpNull]],
-    ["_position", [], ["",objNull,locationNull,[]], 5],
+    ["_position", [], ["", objNull, locationNull, []], 5],
     ["_units", [], [[], ""]],
     ["_numGroups", 1, [0, []], [2]],
     ["_side", east, [sideUnknown]],

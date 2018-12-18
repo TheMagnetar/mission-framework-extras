@@ -16,7 +16,6 @@
  * Public: No
  */
 
-
 params [
     ["_range", 0, [[], 0], [2]]
 ];
