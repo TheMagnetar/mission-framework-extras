@@ -9,14 +9,14 @@
  * 2: Target acquisition distance <NUMBER> (default: 100)
  * 3: Minimum attack distance <NUMBER> (default: 10)
  * 4: Explosive type <STRING> (default: "IEDLandSmall_Remote_Ammo")
- * 5: Sound defined in CfgSounds <STRING> (default: "allahu")
- * 6: Dead man switch (default: false)
+ * 5: Dead man switch (default: false)
+ * 6: Sound defined in CfgSounds <STRING> (default: "allahu")
  *
  * Return Value:
  * None
  *
  * Example:
- * [cursorTarget, player, 45, 20] call umfx_ai_fnc_pursue
+ * [cursorTarget, west, 100, 10, "IEDLandSmall_Remote_Ammo", true] call umfx_ai_fnc_suicider
  *
  * Public: Yes
  */
