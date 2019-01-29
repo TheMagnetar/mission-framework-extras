@@ -5,3 +5,5 @@
 
     _unit say [_sound, 5];
 }] call CBA_fnc_addEventHandler;
+
+[QGVAR(onRevealUnit), DFUNC(onRevealUnit)] call CBA_fnc_addEventHandler;
