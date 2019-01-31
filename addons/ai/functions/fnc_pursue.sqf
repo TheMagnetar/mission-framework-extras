@@ -26,7 +26,7 @@ params [
 ];
 
 private _grpPursuer = grpnull;
-if (_pursuer isEqualType grpNull)then{
+if (_pursuer isEqualType grpNull) then{
     _grpPursuer = _pursuer;
 } else {
     _grpPursuer = group _pursuer;

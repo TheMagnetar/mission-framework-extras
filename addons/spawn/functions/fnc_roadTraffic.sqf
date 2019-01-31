@@ -8,13 +8,13 @@
  * 1: Units to spawn. First array contains vehicle classames, second array
       contains driver classnames <ARRAY> (default: [])
  * 2: Spawn interval in seconds. In case an array is given, the spawn interval will be random between [a,b] <NUMBER, ARRAY> (default: 20)
- * 3: Stop condition <BOOL, CODE> (default: false)
+ * 3: Stop condition <CODE> (default: {false})
  *
  * Return Value:
  * None
  *
  * Example:
- * - ["markerStart", "markerEnd", [["car_1"], ["driver1", "driver2"]], 40, {stopRoadTraffic}] call umfx_spawn_fnc_roadTraffic
+ * [["markerStart", "markerEnd"], [["C_Van_01_fuel_F"], ["C_man_1", "C_Man_casual_1_F"]], 40, {stopRoadTraffic}] call umfx_spawn_fnc_roadTraffic
  *
  * Public: Yes
  */
@@ -23,7 +23,7 @@ params [
     ["_path", [[], []], [[]]],
     ["_units", [[], []], ["", []], 2],
     ["_interval", 20, [0, []], 2],
-    ["_stopCondition", false, [false, {}]]
+    ["_stopCondition", {false}, [{}]]
 ];
 
 {
@@ -38,14 +38,15 @@ private _args = [_path, _units, _interval, _stopCondition, _time];
 
     _args params ["_path", "_units", "_interval", "_stopCondition", "_time"];
 
-    if (_stopCondition) exitWith {
+    if ([] call _stopCondition) exitWith {
         [_pfhId] call CBA_fnc_removePerFrameHandler;
     };
 
-    if (_time > CBA_missionTime) then {
+    if (_time >= CBA_missionTime) then {
         private _grp = createGroup civilian;
         private _vehicle = (selectRandom (_units select 0)) createVehicle [0, 0, 0];
         private _driver = (selectRandom (_units select 1)) createUnit [[0, 0, 0], _grp];
+
         _driver assignAsDriver _vehicle;
         _driver moveInDriver _vehicle;
         _vehicle setPos (path select 0);
