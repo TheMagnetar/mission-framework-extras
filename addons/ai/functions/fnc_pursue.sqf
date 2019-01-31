@@ -32,6 +32,10 @@ if (_pursuer isEqualType grpNull)then{
     _grpPursuer = group _pursuer;
 };
 
+if (!local leader _grpPursuer) exitWith {
+    [QGVAR(pursueChangeLocality), _this, leader _grpPursuer] call CBA_fnc_targetEvent;
+};
+
 _grpPursuer setSpeedMode "FULL";
 private _time = CBA_missionTime;
 
@@ -39,10 +43,18 @@ private _time = CBA_missionTime;
     params ["_handleArray", "_handleId"];
     _handleArray params ["_grpPursuer", "_target", "_radius", "_timeout", "_time"];
 
+    private _leaderPursuer = leader _grpPursuer;
+    if (!local _leaderPursuer) exitWith {
+        [_handleId] call CBA_fnc_removePerFrameHandler;
+        [
+            QGVAR(pursueChangeLocality),
+            [_grpPursuer, _target, _radius, _timeout],
+            leader _grpPursuer
+        ] call CBA_fnc_targetEvent;
+    };
+
     if (isNull _grpPursuer || {units _grpPursuer isEqualTo []}) exitWith {[_handleId] call CBA_fnc_removePerFrameHandler;};
     if (isNull _target || {_target isEqualTo ""} || {_target isEqualType grpNull && {units _target isEqualTo []}}) exitWith {[_handleId] call CBA_fnc_removePerFrameHandler;};
-
-    private _leaderPursuer = leader _grpPursuer;
     if (moveToCompleted _leaderPursuer || {moveToFailed _leaderPursuer} || {!alive _leaderPursuer} || {CBA_missionTime < _time}) exitWith {};
 
     private _pos = [_target] call CBA_fnc_getPos;
@@ -56,9 +68,3 @@ private _time = CBA_missionTime;
     _handleArray set [4, _time];
 
 }, 1, [_grpPursuer, _target, _radius, _timeout, _time]] call CBA_fnc_addPerFrameHandler;
-
-
-params ["_unit"];
-
-if !(isServer) exitWith {};
-

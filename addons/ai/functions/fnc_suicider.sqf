@@ -43,6 +43,14 @@ if (isNil "_suicider" || {isNull _suicider}) exitWith {
     ERROR("Undefined unit");
 };
 
+if (!local _suicider) exitWith {
+    [
+        QGVAR(suiciderChangeLocality),
+        [_suicider, _side, _targetDist, _attackDist, _explosive, _deadManSwitch, _sound],
+        _suicider
+    ] call CBA_fnc_targetEvent;
+};
+
 private _time = CBA_missionTime;
 private _target = objNull;
 
@@ -61,9 +69,20 @@ _unit addEventHandler ["Hit", {
 }];
 
 [{
-    params ["_args", "_pfhId"];
+    params ["_args", "_handleId"];
     _args params ["_unit", "_side", "_targetDist", "_attackDist", "_explosive", "_sound", "_time", "_target"];
 
+    // Account for locality changes
+    if (!local _unit) exitWith {
+        [_handleId] call CBA_fnc_removePerFrameHandler;
+        [
+            QGVAR(suiciderChangeLocality),
+            [_unit, _side, _targetDist, _attackDist, _explosive, _unit getVariable QGVAR(deadManSwitch), _sound],
+            _unit
+        ] call CBA_fnc_targetEvent;
+    };
+
+    private _playerUnits = ([] call CBA_fnc_players) select {alive _x};
     if ((_playerUnits findIf {(_x distance _unit) < _targetDist}) == -1) exitWith {};
 
     // Acquire or reaquire target for maximum damage
@@ -79,7 +98,7 @@ _unit addEventHandler ["Hit", {
             _bomb setPosATL (getPosATL _unit);
             _bomb setDamage 1;
         };
-        [_pfhId] call CBA_fnc_removePerFrameHandler;
+        [_handleId] call CBA_fnc_removePerFrameHandler;
     };
 
     if (isNull _target) exitWith {};
@@ -100,7 +119,7 @@ _unit addEventHandler ["Hit", {
             private _bomb = _explosive createVehicle [0, 0, 0];
             _bomb setPosATL (getPosATL _unit);
             _bomb setDamage 1;
-            [_pfhId] call CBA_fnc_removePerFrameHandler;
+            [_handleId] call CBA_fnc_removePerFrameHandler;
         };
     };
 }, 1, [_suicider, _side, _targetDist, _attackDist, _explosive, _sound, _time, _target]] call CBA_fnc_addPerFrameHandler;
