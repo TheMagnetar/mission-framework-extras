@@ -23,6 +23,8 @@ params [
     ["_stopCondition", {false}, [{}]]
 ];
 
+if (!hasInterface) exitWith {};
+
 if !(_side isEqualType []) then {
     _side = [_side];
 };

@@ -55,6 +55,7 @@ private _time = CBA_missionTime;
 private _target = objNull;
 
 _unit setVariable [QGVAR(deadManSwitch), _deadManSwitch];
+_unit setVariable [QGVAR(explosive), _explosive];
 
 _unit addEventHandler ["Hit", {
     params ["_unit", "", "_damage", ""];
@@ -63,6 +64,7 @@ _unit addEventHandler ["Hit", {
 
     // Deactivate Dead Man Switch
     _unit setVariable [QGVAR(deadManSwitch), false];
+    private _explosive = _unit getVariable [QGVAR(explosive), ""];
     private _bomb = _explosive createVehicle [0, 0, 0];
     _bomb setPosATL (getPosATL _unit);
     _bomb setDamage 1;
@@ -70,14 +72,14 @@ _unit addEventHandler ["Hit", {
 
 [{
     params ["_args", "_handleId"];
-    _args params ["_unit", "_side", "_targetDist", "_attackDist", "_explosive", "_sound", "_time", "_target"];
+    _args params ["_unit", "_side", "_targetDist", "_attackDist", "_sound", "_time", "_target"];
 
     // Account for locality changes
     if (!local _unit) exitWith {
         [_handleId] call CBA_fnc_removePerFrameHandler;
         [
             QGVAR(suiciderChangeLocality),
-            [_unit, _side, _targetDist, _attackDist, _explosive, _unit getVariable QGVAR(deadManSwitch), _sound],
+            [_unit, _side, _targetDist, _attackDist, _unit getVariable QGVAR(explosive), _unit getVariable QGVAR(deadManSwitch), _sound],
             _unit
         ] call CBA_fnc_targetEvent;
     };
@@ -87,13 +89,14 @@ _unit addEventHandler ["Hit", {
 
     // Acquire or reaquire target for maximum damage
     if (CBA_missionTime >= _time) then {
-        _target = [_suicider, _side, _targetDist] call FUNC(suiciderGetTarget);
-        _args set [6, CBA_missionTime + 5];
-        _args set [7, _target];
+        _target = [_unit, _side, _targetDist] call FUNC(suiciderGetTarget);
+        _args set [5, CBA_missionTime + 5];
+        _args set [6, _target];
     };
 
     if (!alive _unit) exitWith {
         if (_unit getVariable QGVAR(deadManSwitch)) then {
+            private _explosive = _unit getVariable QGVAR(explosive);
             private _bomb = _explosive createVehicle [0, 0, 0];
             _bomb setPosATL (getPosATL _unit);
             _bomb setDamage 1;
@@ -106,20 +109,21 @@ _unit addEventHandler ["Hit", {
     _unit doMove (getPos _target);
 
     if (_unit distance _target < _attackDist) then {
-        if !(_unit getVariable [GVAR(finalSprint), false]) then {
-            [GVAR(suicider), [_sound]] call CBA_fnc_globalEvent;
+        if !(_unit getVariable [QGVAR(finalSprint), false]) then {
+            [QGVAR(suicider), [_unit, _sound]] call CBA_fnc_globalEvent;
             _unit SetUnitPos "Up";
             _unit SetSpeedMode "Full";
             _unit SetCombatMode "Red";
             _unit SetBehaviour "Careless";
-            _unit setVariable [GVAR(finalSprint), true];
+            _unit setVariable [QGVAR(finalSprint), true];
         };
 
         if (_unit distance _target < 3) then {
+            private _explosive = _unit getVariable QGVAR(explosive);
             private _bomb = _explosive createVehicle [0, 0, 0];
             _bomb setPosATL (getPosATL _unit);
             _bomb setDamage 1;
             [_handleId] call CBA_fnc_removePerFrameHandler;
         };
     };
-}, 1, [_suicider, _side, _targetDist, _attackDist, _explosive, _sound, _time, _target]] call CBA_fnc_addPerFrameHandler;
+}, 1, [_suicider, _side, _targetDist, _attackDist, _sound, _time, _target]] call CBA_fnc_addPerFrameHandler;

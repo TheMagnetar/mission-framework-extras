@@ -12,7 +12,7 @@
  * Target <OBJECT>
  *
  * Example:
- * [cursorTarget, player, 45, 20] call umfx_ai_fnc_pursue
+ * [cursorTarget, player, 45] call umfx_ai_fnc_suiciderGetTarget
  *
  * Public: No
  */
@@ -27,9 +27,9 @@ private _targets = [];
     if ((_suicider knowsAbout _playerUnit) > 1) then {
         // Evaluate potential damage
         private _estimatedDamage = 0;
-        private _damagedTargets = _potentialTargets select {(_x select 4) inArea [getPosATL _suicider, 15, 15]};
+        private _damagedTargets = _potentialTargets select {(_x select 4) inArea [getPosATL _suicider, 15, 15, 0, false]};
         {
-            _estimatedDamage = _estimatedDamage + (_x select 2);
+            _estimatedDamage = _estimatedDamage + (_x select 3);
         } forEach _damagedTargets;
 
         _targets pushBack [_estimatedDamage, _playerUnit];
@@ -38,4 +38,8 @@ private _targets = [];
 
 _targets sort false;
 
-(_targets select 0) select 1
+if (_targets isEqualTo []) then {
+    objNull
+} else {
+    (_targets select 0) select 1
+};
