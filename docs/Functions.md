@@ -108,14 +108,31 @@ of the unit's side.
 **Description**:Generates road traffic between two points.
 
 **Arguments:**
-- 0: Start position <MARKER, TRIGGER, LOCATION, ARRAY> (default: [0, 0, 0])
-- 1: End position <MARKER, TRIGGER, LOCATION, ARRAY> (default: [0, 0, 0])
-- 2: Units to spawn. First array contains vehicle classames, second array
+- 0: Path. Array of <MARKER, TRIGGER, LOCATION, ARRAY> (default: [[0, 0, 0], [0,0,0]])
+- 1: Units to spawn. First array contains vehicle classames, second array
      contains driver classnames <ARRAY> (default: [])
-- 3: Spawn interval in seconds. In case an array is given, the spawn interval will be random between [a,b] <NUMBER, ARRAY> (default: 20)
-- 4: Stop condition <CODE> (default: {false})
+- 2: Spawn interval in seconds. In case an array is given, the spawn interval will be random between [a,b] <NUMBER, ARRAY> (default: 20)
+- 3: Stop condition <CODE> (default: {false})
 
 **Return Value:** None
 
 **Example:**
-["markerStart", "markerEnd", [["C_Van_01_fuel_F"], ["C_man_1", "C_Man_casual_1_F"]], 40, {stopRoadTraffic}] call umfx_spawn_fnc_roadTraffic
+[["markerStart", "markerEnd"], [["C_Van_01_fuel_F"], ["C_man_1", "C_Man_casual_1_F"]], 40, {stopRoadTraffic}] call umfx_spawn_fnc_roadTraffic
+
+### Suicider
+
+**Description:** Makes a suicide unit.
+
+** Arguments:**
+- 0: Suicider <OBJECT> (default: objNull)
+- 1: Target side <SIDE> (default: west)
+- 2: Target acquisition distance <NUMBER> (default: 100)
+- 3: Minimum attack distance <NUMBER> (default: 10)
+- 4: Explosive type <STRING> (default: "IEDLandSmall_Remote_Ammo")
+- 5: Dead man switch (default: false)
+- 6: Sound defined in CfgSounds <STRING> (default: "allahu")
+
+**Return Value:** None
+
+**Example:**
+[cursorTarget, west, 100, 10, "IEDLandSmall_Remote_Ammo", true] call umfx_ai_fnc_suicider
