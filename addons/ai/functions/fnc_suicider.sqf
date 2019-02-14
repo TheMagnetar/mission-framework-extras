@@ -28,7 +28,7 @@ params [
     ["_attackDist", 10, [0]],
     ["_explosive", "IEDLandSmall_Remote_Ammo", [""]],
     ["_deadManSwitch", false, [false]],
-    ["_sound", "allahu", [""]]
+    ["_sound", QGVAR(allahu), [""]]
 ];
 
 private _suicider = objNull;
