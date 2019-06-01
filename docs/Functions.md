@@ -22,7 +22,7 @@ title: Public functions
 **Return Value:** None
 
 **Example:**
-- [player, "leg_r", 0.8, "bullet"] call umfx_ace_fnc_assignWound;
+- [player, "leg_r", 0.8, "bullet"] call mfx_ace_fnc_assignWound;
 
 ### Artillery Fire
 
@@ -44,8 +44,8 @@ of the unit's side.
 **Return Value:** None
 
 **Examples:**
-- ["Sh_155mm_AMOS", player, 100, 35, 4, 0.5, west, "explosive"] call umfx_support_fnc_artilleryFire
-- [["Sh_155mm_AMOS", "Sh_120mm_HE"], player, 100, 35, 4, 0.5, [west, civillian], "explosive"] call umfx_support_fnc_artilleryFire
+- ["Sh_155mm_AMOS", player, 100, 35, 4, 0.5, west, "explosive"] call mfx_support_fnc_artilleryFire
+- [["Sh_155mm_AMOS", "Sh_120mm_HE"], player, 100, 35, 4, 0.5, [west, civillian], "explosive"] call mfx_support_fnc_artilleryFire
 
 ### Pursue
 
@@ -60,7 +60,7 @@ of the unit's side.
 **Return Value:** None
 
 **Examples:**
-- [cursorTarget, player, 45, 20] call umfx_ai_fnc_pursue
+- [cursorTarget, player, 45, 20] call mfx_ai_fnc_pursue
 
 ### Spawn pursuing roups
 
@@ -83,11 +83,11 @@ of the unit's side.
 
 **Examples:**
 - Spawn one group at a random position in the marker "marker"
-  `[player, "marker", ["CUP_O_TK_INS_Soldier_GL","CUP_O_TK_INS_Soldier_GL"]] call umfx_ai_fnc_pursuingGroups;`
+  `[player, "marker", ["CUP_O_TK_INS_Soldier_GL","CUP_O_TK_INS_Soldier_GL"]] call mfx_ai_fnc_pursuingGroups;`
 - Spawn between 1 and four groups at a random position in the marker "marker", the radius will be random between 5 and 15 meters
-  `[player, "marker", ["CUP_O_TK_INS_Soldier_GL","CUP_O_TK_INS_Soldier_GL"], [1, 4], east, [5, 15], 30] call umfx_spawn_fnc_pursuingGroups;`
+  `[player, "marker", ["CUP_O_TK_INS_Soldier_GL","CUP_O_TK_INS_Soldier_GL"], [1, 4], east, [5, 15], 30] call mfx_spawn_fnc_pursuingGroups;`
 - Spawn one group at the defined area
-  `[player, [center, a, b, angle, isRectangle], ["CUP_O_TK_INS_Soldier_GL","CUP_O_TK_INS_Soldier_GL"]] call umfx_ai_fnc_pursuingGroups;`
+  `[player, [center, a, b, angle, isRectangle], ["CUP_O_TK_INS_Soldier_GL","CUP_O_TK_INS_Soldier_GL"]] call mfx_ai_fnc_pursuingGroups;`
 
 
 ### Move to random position
@@ -101,7 +101,7 @@ of the unit's side.
 **Return Value:** None
 
 **Example:**
-[this, [p1, p2, p3, p4]] call umfx_spawn_fnc_unitRandomPos
+[this, [p1, p2, p3, p4]] call mfx_spawn_fnc_unitRandomPos
 
 ### Road traffic
 
@@ -117,7 +117,7 @@ of the unit's side.
 **Return Value:** None
 
 **Example:**
-[["markerStart", "markerEnd"], [["C_Van_01_fuel_F"], ["C_man_1", "C_Man_casual_1_F"]], 40, {stopRoadTraffic}] call umfx_spawn_fnc_roadTraffic
+[["markerStart", "markerEnd"], [["C_Van_01_fuel_F"], ["C_man_1", "C_Man_casual_1_F"]], 40, {stopRoadTraffic}] call mfx_spawn_fnc_roadTraffic
 
 ### Suicider
 
@@ -135,4 +135,4 @@ of the unit's side.
 **Return Value:** None
 
 **Example:**
-[cursorTarget, west, 100, 10, "IEDLandSmall_Remote_Ammo", true] call umfx_ai_fnc_suicider
+[cursorTarget, west, 100, 10, "IEDLandSmall_Remote_Ammo", true] call mfx_ai_fnc_suicider

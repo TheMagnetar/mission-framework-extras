@@ -21,11 +21,11 @@
  *
  * Example:
  * - Spawn one group at a random position in the marker "marker"
- *   [player, "marker", ["CUP_O_TK_INS_Soldier_GL","CUP_O_TK_INS_Soldier_GL"]] call umfx_spawn_fnc_pursuingGroups
+ *   [player, "marker", ["CUP_O_TK_INS_Soldier_GL","CUP_O_TK_INS_Soldier_GL"]] call mfx_spawn_fnc_pursuingGroups
  * - Spawn between 1 and four groups at a random position in the marker "marker", the radius will be random between 5 and 15 meters
- *   [player, "marker", ["CUP_O_TK_INS_Soldier_GL","CUP_O_TK_INS_Soldier_GL"], [1, 4], east, [5, 15], 30] call umfx_spawn_fnc_pursuingGroups
+ *   [player, "marker", ["CUP_O_TK_INS_Soldier_GL","CUP_O_TK_INS_Soldier_GL"], [1, 4], east, [5, 15], 30] call mfx_spawn_fnc_pursuingGroups
  * - Spawn one group at the defined area
- *   [player, [center, a, b, angle, isRectangle], ["CUP_O_TK_INS_Soldier_GL","CUP_O_TK_INS_Soldier_GL"]] call umfx_spawn_fnc_pursuingGroups
+ *   [player, [center, a, b, angle, isRectangle], ["CUP_O_TK_INS_Soldier_GL","CUP_O_TK_INS_Soldier_GL"]] call mfx_spawn_fnc_pursuingGroups
  *
  * Public: Yes
  */

@@ -1,6 +1,6 @@
 #define COMPONENT spawn
 #define COMPONENT_BEAUTIFIED Spawn
-#include "\u\umfx\addons\main\script_mod.hpp"
+#include "\m\mfx\addons\main\script_mod.hpp"
 
 // #define DEBUG_MODE_FULL
 // #define DISABLE_COMPILE_CACHE
@@ -14,4 +14,4 @@
     #define DEBUG_SETTINGS DEBUG_SETTINGS_SPAWN
 #endif
 
-#include "\u\umfx\addons\main\script_macros.hpp"
+#include "\m\mfx\addons\main\script_macros.hpp"

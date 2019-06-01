@@ -12,7 +12,7 @@
  * Target <OBJECT>
  *
  * Example:
- * [cursorTarget, player, 45] call umfx_ai_fnc_suiciderGetTarget
+ * [cursorTarget, player, 45] call mfx_ai_fnc_suiciderGetTarget
  *
  * Public: No
  */

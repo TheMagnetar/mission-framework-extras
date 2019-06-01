@@ -10,8 +10,8 @@
  * Random number between min and max values <NUMBER>
  *
  * Example:
- * [[1, 3]] call umfx_core_fnc_getRandomMinMax
- * [1] call umfx_core_fnc_getRandomMinMax
+ * [[1, 3]] call mfx_core_fnc_getRandomMinMax
+ * [1] call mfx_core_fnc_getRandomMinMax
  *
  * Public: No
  */

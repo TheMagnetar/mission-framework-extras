@@ -12,7 +12,7 @@
  * Player revealed <BOOL>
  *
  * Example:
- * [player, cursorTarget, 1.4] call umfx_ai_fnc_onRevealUnit
+ * [player, cursorTarget, 1.4] call mfx_ai_fnc_onRevealUnit
  *
  * Public: Yes
  */

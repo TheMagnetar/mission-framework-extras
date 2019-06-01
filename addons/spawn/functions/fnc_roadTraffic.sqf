@@ -14,7 +14,7 @@
  * None
  *
  * Example:
- * [["markerStart", "markerEnd"], [["C_Van_01_fuel_F"], ["C_man_1", "C_Man_casual_1_F"]], 40, {stopRoadTraffic}] call umfx_spawn_fnc_roadTraffic
+ * [["markerStart", "markerEnd"], [["C_Van_01_fuel_F"], ["C_man_1", "C_Man_casual_1_F"]], 40, {stopRoadTraffic}] call mfx_spawn_fnc_roadTraffic
  *
  * Public: Yes
  */

@@ -6,10 +6,10 @@ class CfgPatches {
         units[] = {};
         weapons[] = {};
         requiredVersion = REQUIRED_VERSION;
-        requiredAddons[] = {"umfx_main"};
+        requiredAddons[] = {"mfx_main"};
         authors[] = {"TheMagnetar"};
-        author = "UST101";
-        authorUrl = "http://www.ust101.com/";
+        author = "TheMagnetar";
+        authorUrl = "https://github.com/TheMagnetar/mission-framework-extras/";
         VERSION_CONFIG;
     };
 };

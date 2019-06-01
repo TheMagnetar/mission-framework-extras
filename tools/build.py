@@ -5,8 +5,8 @@ import sys
 import subprocess
 
 ######## GLOBALS #########
-MAINPREFIX = "u"
-PREFIX = "umfx_"
+MAINPREFIX = "m"
+PREFIX = "mfx_"
 ##########################
 
 def mod_time(path):
@@ -32,7 +32,7 @@ def check_for_obsolete_pbos(addonspath, file):
 def main():
     print("""
   ####################
-  # UMFX Debug Build #
+  #  MFX Debug Build #
   ####################
 """)
 

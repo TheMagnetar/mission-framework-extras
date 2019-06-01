@@ -10,7 +10,7 @@
  * None
  *
  * Example:
- * [cursorTarget] call umfx_core_fnc_deleteVehicle
+ * [cursorTarget] call mfx_core_fnc_deleteVehicle
  *
  * Public: Yes
  */

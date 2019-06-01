@@ -13,7 +13,7 @@
  * None
  *
  * Example:
- * [player, "leg_r", 0.8, "bullet"] call umfx_ace_fnc_assignWound;
+ * [player, "leg_r", 0.8, "bullet"] call mfx_ace_fnc_assignWound;
  *
  * Public: Yes
  */

@@ -13,7 +13,7 @@
  * None
  *
  * Example:
- * [cursorTarget, player , 12, 8, 0.2, 1.2, "", "ACE_556x45_Ball_Mk318"] call umfx_ai_fnc_suppressiveFire
+ * [cursorTarget, player , 12, 8, 0.2, 1.2, "", "ACE_556x45_Ball_Mk318"] call mfx_ai_fnc_suppressiveFire
  *
  * Public: Yes
  */

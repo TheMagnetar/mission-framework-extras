@@ -12,27 +12,27 @@ import subprocess
 import winreg
 
 ######## GLOBALS #########
-MAINDIR = "u"
-PROJECTDIR = "umfx"
+MAINDIR = "m"
+PROJECTDIR = "mfx"
 ##########################
 
 def main():
     FULLDIR = "{}\\{}".format(MAINDIR,PROJECTDIR)
     print("""
   ######################################
-  # UMFX Development Environment Setup #
+  #  MFX Development Environment Setup #
   ######################################
 
-  This script will create your UMFX dev environment for you.
+  This script will create your MFX dev environment for you.
 
   Before you run this, you should already have:
     - A properly setup ACE3 Development Environment
 
   If you have not done those things yet, please abort this script in the next step and do so first.
 
-  This script will create two hard links on your system, both pointing to your UMFX project folder:
-    [Arma 3 installation directory]\\{} => UMFX project folder
-    P:\\{}                              => UMFX project folder
+  This script will create two hard links on your system, both pointing to your MFX project folder:
+    [Arma 3 installation directory]\\{} => MFX project folder
+    P:\\{}                              => MFX project folder
     """.format(FULLDIR,FULLDIR))
     print("\n")
 

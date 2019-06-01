@@ -21,8 +21,8 @@
  * None
  *
  * Example:
- * ["Sh_155mm_AMOS", player, 100, 35, 4, 0.5, west, "explosive", 0] call umfx_support_fnc_artilleryFire
- * [["Sh_155mm_AMOS", "Sh_120mm_HE"], player, 100, 35, 4, 0.5, [west, civillian], "explosive", 0] call umfx_support_fnc_artilleryFire
+ * ["Sh_155mm_AMOS", player, 100, 35, 4, 0.5, west, "explosive", 0] call mfx_support_fnc_artilleryFire
+ * [["Sh_155mm_AMOS", "Sh_120mm_HE"], player, 100, 35, 4, 0.5, [west, civillian], "explosive", 0] call mfx_support_fnc_artilleryFire
 
  * Public: Yes
  */

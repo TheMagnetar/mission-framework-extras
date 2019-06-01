@@ -1,5 +1,5 @@
 *.pbo
 *.zip
 release/
-@umfx/
+@mfx/
 tools/make.cache

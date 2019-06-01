@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project name="UMFX">
+<Project name="MFX">
     <Package name="Main">
-        <Key ID="STR_UMFX_Main_URL">
-            <English>http://www.ust101.com/</English>
+        <Key ID="STR_MFX_Main_URL">
+            <English>https://github.com/TheMagnetar/mission-framework-extras/</English>
         </Key>
     </Package>
 </Project>

@@ -16,7 +16,7 @@
  * None
  *
  * Example:
- * [cursorTarget, west, 100, 10, "IEDLandSmall_Remote_Ammo", true] call umfx_ai_fnc_suicider
+ * [cursorTarget, west, 100, 10, "IEDLandSmall_Remote_Ammo", true] call mfx_ai_fnc_suicider
  *
  * Public: Yes
  */

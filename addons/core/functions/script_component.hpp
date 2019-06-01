@@ -1,1 +1,1 @@
-#include "\u\umfx\addons\core\script_component.hpp"
+#include "\m\mfx\addons\core\script_component.hpp"

@@ -11,7 +11,7 @@
  * None
  *
  * Example:
- * [this, [p1, p2, p3, p4]] call umfx_spawn_fnc_unitRandomPos
+ * [this, [p1, p2, p3, p4]] call mfx_spawn_fnc_unitRandomPos
  *
  * Public: Yes
  */

@@ -5,8 +5,8 @@
 // Default versioning level
 #define DEFAULT_VERSIONING_LEVEL 2
 
-#define DGVAR(varName)    if(isNil "UMFX_DEBUG_NAMESPACE") then { UMFX_DEBUG_NAMESPACE = []; }; if(!(QUOTE(GVAR(varName)) in UMFX_DEBUG_NAMESPACE)) then { PUSH(UMFX_DEBUG_NAMESPACE, QUOTE(GVAR(varName))); }; GVAR(varName)
-#define DVAR(varName)     if(isNil "UMFX_DEBUG_NAMESPACE") then { UMFX_DEBUG_NAMESPACE = []; }; if(!(QUOTE(varName) in UMFX_DEBUG_NAMESPACE)) then { PUSH(UMFX_DEBUG_NAMESPACE, QUOTE(varName)); }; varName
+#define DGVAR(varName)    if(isNil "MFX_DEBUG_NAMESPACE") then { MFX_DEBUG_NAMESPACE = []; }; if(!(QUOTE(GVAR(varName)) in MFX_DEBUG_NAMESPACE)) then { PUSH(MFX_DEBUG_NAMESPACE, QUOTE(GVAR(varName))); }; GVAR(varName)
+#define DVAR(varName)     if(isNil "MFX_DEBUG_NAMESPACE") then { MFX_DEBUG_NAMESPACE = []; }; if(!(QUOTE(varName) in MFX_DEBUG_NAMESPACE)) then { PUSH(MFX_DEBUG_NAMESPACE, QUOTE(varName)); }; varName
 #define DFUNC(var1) TRIPLES(ADDON,fnc,var1)
 #define DEFUNC(var1,var2) TRIPLES(DOUBLES(PREFIX,var1),fnc,var2)
 
@@ -25,6 +25,6 @@
 
 #define PREP_MODULE(folder) [] call compile preprocessFileLineNumbers QPATHTOF(folder\__PREP__.sqf)
 
-#define UMFX_DEPRECATED(arg1,arg2,arg3) WARNING_3("%1 is deprecated. Support will be dropped in version %2. Replaced by: %3",arg1,arg2,arg3)
+#define MFX_DEPRECATED(arg1,arg2,arg3) WARNING_3("%1 is deprecated. Support will be dropped in version %2. Replaced by: %3",arg1,arg2,arg3)
 
 #include "script_debug.hpp"

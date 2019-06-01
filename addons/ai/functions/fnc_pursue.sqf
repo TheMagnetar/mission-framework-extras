@@ -13,7 +13,7 @@
  * None
  *
  * Example:
- * [cursorTarget, player, 45, 20] call umfx_ai_fnc_pursue
+ * [cursorTarget, player, 45, 20] call mfx_ai_fnc_pursue
  *
  * Public: Yes
  */
